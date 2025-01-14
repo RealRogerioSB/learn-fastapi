@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-# from fastapi.responses import JSONResponse
+# from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -22,8 +22,8 @@ content_html = """
 
 @app.get("/")
 async def root():
-    return HTMLResponse(content=content_html)
-    # return JSONResponse(content=content_json)
+    # return HTMLResponse(content=content_html)
+    return JSONResponse(content=content_json)
 
 
 if __name__ == '__main__':
