@@ -1,6 +1,6 @@
 import requests
 
-print("\nAdicionando um item...")
+print("Adicionando um item...")
 print(requests.post(url="http://localhost:5000/item", json=dict(name="Tool 2", price=9.99, count=8, id=4)).json())
 
 print("\nExibindo os itens após adicionar novo item...")
@@ -35,3 +35,15 @@ print(requests.put("http://localhost:5000/item/1").json())
 
 print("\nAtualizando um item n.º 1...")
 print(requests.put("http://localhost:5000/item/1?name=SuperDuperHammer").json())
+
+print("\nExibindo um item a pesquisar com count=20...")
+print(requests.get("http://localhost:5000/item?count=20").json())
+
+print("\nExibindo um item a pesquisar com category=tools...")
+print(requests.get("http://localhost:5000/item?category=tools").json())
+
+print("\nExibindo um item a pesquisar com category=ingredient...")
+print(requests.get("http://localhost:5000/item?category=ingredient").json())
+
+print("\nExibindo um item a pesquisar com count=Hello...")
+print(requests.get("http://localhost:5000/item/?count=Hello").json())
