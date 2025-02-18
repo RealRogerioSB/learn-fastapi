@@ -23,12 +23,12 @@ class Item(BaseModel):
     price: float = Field(description="Price of the item in Euro.")
     count: int = Field(description="Amount of instances of this item in stock.")
     id: int = Field(description="Unique integer that specifies this item.")
-    category: Category = Field(description="Category this item belongs to.")
+    category: Category = Field(default=Category.TOOLS, description="Category this item belongs to.")
 
 
 items = {
     1: Item(name="Hammer", price=9.99, count=20, id=1, category=Category.TOOLS),
-    2: Item(name="Pliers", price=5.99, count=20, id=2, category=Category.TOOLS),
+    2: Item(name="Pliers", price=5.99, count=60, id=2, category=Category.TOOLS),
     3: Item(name="Nails", price=1.99, count=100, id=3, category=Category.CONSUMABLES),
 }
 
@@ -48,10 +48,10 @@ def query_item_by_id(item_id: int) -> Item:
 
 @app.get("/item")
 def query_item_by_parameters(
-        name: str | None = None,
-        price: float | None = None,
-        count: int | None = None,
-        category: Category | None = None,
+    name: str | None = None,
+    price: float | None = None,
+    count: int | None = None,
+    category: Category | None = None,
 ) -> dict[str, dict[str, str | int | float | Category | None] | list[Item]]:
     def check_item(item: Item):
         """Check if the item matches the query arguments from the outer scope."""
@@ -81,31 +81,31 @@ def add_item(item: Item) -> dict[str, Item]:
 @app.put(
     "/item/{item_id}",
     responses={
-        404: {"description": "Item not found"},
-        400: {"description": "No arguments specified"},
+         404: {"description": "Item not found"},
+         400: {"description": "No arguments specified"}
     },
 )
 def update(
-        item_id: int = Path(title="Item ID", description="Unique integer that specifies an item.", ge=0),
-        name: str | None = Query(
-            title="Name",
-            description="New name of the item.",
-            default=None,
-            min_length=1,
-            max_length=8,
-        ),
-        price: float | None = Query(
-            title="Price",
-            description="New price of the item in Euro.",
-            default=None,
-            gt=0.0,
-        ),
-        count: int | None = Query(
-            title="Count",
-            description="New amount of instances of this item in stock.",
-            default=None,
-            ge=0,
-        ),
+    item_id: int = Path(title="Item ID", description="Unique integer that specifies an item.", ge=0),
+    name: str | None = Query(
+        title="Name",
+        description="New name of the item.",
+        default=None,
+        min_length=1,
+        max_length=8,
+    ),
+    price: float | None = Query(
+        title="Price",
+        description="New price of the item in Euro.",
+        default=None,
+        gt=0.0,
+    ),
+    count: int | None = Query(
+        title="Count",
+        description="New amount of instances of this item in stock.",
+        default=None,
+        ge=0,
+    ),
 ):
     if item_id not in items:
         raise HTTPException(status_code=404, detail=f"Item with {item_id=} does not exist.")
@@ -132,4 +132,4 @@ def delete_item(item_id: int) -> dict[str, Item]:
 
 
 if __name__ == '__main__':
-    uvicorn.run(app="main:app", port=5000)
+    uvicorn.run(app="arjan_fastapi:app", port=5000)
